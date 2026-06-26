@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "../../Compoment/Sidebar/Sidebar";
+import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 import { Search } from "lucide-react";
 
 function FoodManagement() {
@@ -120,25 +120,25 @@ function FoodManagement() {
 
   const handleDelete = async (id) => {
 
-  try {
+    try {
 
-    await axios.delete(
-      `http://127.0.0.1:8000/products/${id}`
-    );
+      await axios.delete(
+        `http://127.0.0.1:8000/products/${id}`
+      );
 
-    fetchProducts();
+      fetchProducts();
 
-    setShowDeleteModal(false);
+      setShowDeleteModal(false);
 
-    setSelectedId(null);
+      setSelectedId(null);
 
-  } catch (err) {
+    } catch (err) {
 
-    console.log(err);
+      console.log(err);
 
-  }
+    }
 
-};
+  };
 
   return (
     <div className="d-flex min-vh-100 bg-light">
@@ -175,6 +175,16 @@ function FoodManagement() {
           {filteredFoods.map((food) => (
             <div className="col-md-3" key={food.id}>
               <div className="card shadow-sm h-100">
+
+                <img
+                  src={food.image}
+                  alt={food.name}
+                  className="card-img-top"
+                  style={{
+                    height: "200px",
+                    objectFit: "cover"
+                  }}
+                />
 
                 <div className="card-body">
 
@@ -254,6 +264,14 @@ function FoodManagement() {
 
                   <input
                     className="form-control mb-2"
+                    placeholder="Ảnh sản phẩm"
+                    name="image"
+                    value={formData.image}
+                    onChange={handleChange}
+                  />
+
+                  <input
+                    className="form-control mb-2"
                     placeholder="Tên sản phẩm"
                     name="name"
                     value={formData.name}
@@ -281,6 +299,14 @@ function FoodManagement() {
                     placeholder="Số lượng"
                     name="quantity"
                     value={formData.quantity}
+                    onChange={handleChange}
+                  />
+
+                  <input
+                    className="form-control mb-2"
+                    placeholder="Trạng thái"
+                    name="status"
+                    value={formData.status}
                     onChange={handleChange}
                   />
 
@@ -314,8 +340,6 @@ function FoodManagement() {
 
         )
       }
-
-//modal sửa
       {
         showEditModal && (
 
@@ -394,8 +418,6 @@ function FoodManagement() {
 
         )
       }
-
-//modal xóa
       {
         showDeleteModal && (
 

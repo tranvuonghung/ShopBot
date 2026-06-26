@@ -1,33 +1,35 @@
 import React, { useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "../../Compoment/Sidebar/Sidebar";
+import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 import { CheckCircle2, Clock, ReceiptText, Search } from "lucide-react";
+import axios from "axios";
+import { useEffect } from "react";
 
-const orders = [
-  { id: "DH001", table: "Ban 01", customer: "Khach le", total: 125000, status: "Dang xu ly", items: "Com ga, Ca phe sua" },
-  { id: "DH002", table: "Ban 04", customer: "Anh Nam", total: 220000, status: "Da phuc vu", items: "Pho bo, Kem vani" },
-  { id: "DH003", table: "Mang ve", customer: "Chi Lan", total: 75000, status: "Cho thanh toan", items: "Com ga" },
-];
-
-const statusClass = {
-  "Dang xu ly": "text-bg-warning",
-  "Da phuc vu": "text-bg-success",
-  "Cho thanh toan": "text-bg-info",
-};
 
 function OrdersDashboardPage() {
   const [keyword, setKeyword] = useState("");
+  const [orders, setOrders] = useState([]);
+
+
+  useEffect(() => {
+    axios.get("http://127.0.0.1:8000/orders/")
+      .then((res) => {
+        setOrders(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const filteredOrders = useMemo(() => {
     const value = keyword.trim().toLowerCase();
+
     if (!value) return orders;
 
     return orders.filter((order) =>
-      `${order.id} ${order.table} ${order.customer} ${order.items} ${order.status}`
+      `${order.id} ${order.guest_name} ${order.status} ${order.note}`
         .toLowerCase()
         .includes(value)
     );
-  }, [keyword]);
+  }, [orders, keyword]);
 
   return (
     <div className="d-flex min-vh-100 bg-light">
@@ -88,31 +90,70 @@ function OrdersDashboardPage() {
           </div>
         </div>
 
-        <div className="card border-0 shadow-sm">
+        <div className="card shadow-sm">
+          <div className="card-header bg-white">
+            <h5 className="mb-0 fw-bold">Danh sách đơn hàng</h5>
+          </div>
+
           <div className="table-responsive">
-            <table className="table align-middle mb-0">
-              <thead className="table-light">
+            <table className="table table-hover table-bordered align-middle mb-0">
+              <thead>
                 <tr>
-                  <th>Ma don</th>
-                  <th>Ban</th>
-                  <th>Khach hang</th>
-                  <th>Mon</th>
-                  <th>Tong tien</th>
-                  <th>Trang thai</th>
+                  <th className="text-center text-white" style={{ backgroundColor: "#0569ff" }}>Mã đơn</th>
+                  <th className="text-white" style={{ backgroundColor: "#0569ff" }}>Khách hàng</th>
+                  <th className="text-white" style={{ backgroundColor: "#0569ff" }}>Tổng tiền</th>
+                  <th className="text-center text-white" style={{ backgroundColor: "#0569ff" }}>Trạng thái</th>
+                  <th className="text-white" style={{ backgroundColor: "#0569ff" }}>Món ăn</th>
                 </tr>
               </thead>
+
               <tbody>
                 {filteredOrders.map((order) => (
                   <tr key={order.id}>
-                    <td className="fw-bold">{order.id}</td>
-                    <td>{order.table}</td>
-                    <td>{order.customer}</td>
-                    <td>{order.items}</td>
-                    <td>{order.total.toLocaleString("vi-VN")} VND</td>
+                    <td className="text-center">
+                      <span className="fw-bold text-primary ">
+                        #{String(order.id).padStart(3, "0")}
+                      </span>
+                    </td>
+
                     <td>
-                      <span className={`badge ${statusClass[order.status]}`}>
+                      <div className="fw-semibold">{order.guest_name}</div>
+                    </td>
+
+                    <td className="text-success fw-bold">
+                      {order.total_price.toLocaleString("vi-VN")} VNĐ
+                    </td>
+
+                    <td className="text-center">
+                      <span
+                        className={`badge rounded-1 py-2 text-center ${order.status === "đã giao"
+                          ? "bg-success"
+                          : order.status === "đang giao"
+                            ? "bg-primary"
+                            : order.status === "xác nhận"
+                              ? "bg-info"
+                              : "bg-warning text-dark"
+                          }`}
+                        style={{
+                          width: "140px",
+                          display: "inline-block"
+                        }}
+                      >
                         {order.status}
                       </span>
+                    </td>
+
+                    <td>
+                      <ul className="list-unstyled mb-0">
+                        {order.items.map((item, index) => (
+                          <li key={index}>
+                            • {item.product_name}
+                            <span className="badge bg-secondary ms-2">
+                              x{item.quantity}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
                     </td>
                   </tr>
                 ))}

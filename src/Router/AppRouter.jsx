@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Dashboard from "../Page/Dashboard/Dashboard";
-import FoodManagement from "../Page/Menu/Menu";
-import OrdersDashboardPage from "../Page/Order/Order";
+import Dashboard from "../Page/Admin/Dashboard/Dashboard";
+import FoodManagement from "../Page/Admin/Menu/Menu";
+import OrdersDashboardPage from "../Page/Admin/Order/Order";
 
 
 export const router = createBrowserRouter([
