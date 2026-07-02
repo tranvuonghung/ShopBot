@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from "../Page/Dashboard/Dashboard";
 import FoodManagement from "../Page/Menu/Menu";
 import OrdersDashboardPage from "../Page/Order/Order";
-
+import PaymentPage from "../client/payment/payment";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +22,8 @@ export const router = createBrowserRouter([
     path: "/orders",
     element: <OrdersDashboardPage />,
   },
-
-
+  {
+    path: "/payment",
+    element: <PaymentPage />,
+  },
 ]);
