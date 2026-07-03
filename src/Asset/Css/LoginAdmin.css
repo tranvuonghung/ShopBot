@@ -1,0 +1,342 @@
+.login-admin-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4f7fb 0%, #eef4ff 45%, #f8fbff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.login-admin-card {
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 60px 58px 54px;
+  box-shadow: 0 22px 70px rgba(15, 23, 42, 0.14);
+  border: 1px solid #e7edf6;
+  box-sizing: border-box;
+}
+
+.login-logo-box {
+  width: 115px;
+  height: 115px;
+  margin: 0 auto 30px;
+  border-radius: 30px;
+  background: #f3f7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2eaff;
+}
+
+.login-logo {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 38px;
+}
+
+.login-header h2 {
+  margin: 0 0 12px;
+  font-size: 42px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.login-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 17px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: #334155;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.form-input {
+  width: 100%;
+  height: 62px;
+  padding: 0 20px;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+  font-size: 17px;
+  color: #0f172a;
+  background: #f8fafc;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.2s ease;
+}
+
+.form-input::placeholder {
+  color: #94a3b8;
+}
+
+.form-input:focus {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.13);
+}
+
+.input-row {
+  position: relative;
+}
+
+.input-row .form-input {
+  padding-right: 60px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password:hover {
+  color: #2563eb;
+}
+
+.login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.remember-password {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #475569;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.remember-password input {
+  width: 16px;
+  height: 16px;
+  accent-color: #6366f1;
+}
+
+.forgot-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.btn-submit {
+  width: 100%;
+  height: 64px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #6366f1, #2563eb);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.24);
+  transition: 0.2s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(37, 99, 235, 0.3);
+}
+
+.error {
+  color: #dc2626;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.error-box {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  padding: 13px 15px;
+  font-size: 15px;
+}
+
+@media (max-width: 640px) {
+  .login-admin-page {
+    padding: 16px;
+  }
+
+  .login-admin-card {
+    max-width: 100%;
+    padding: 42px 28px;
+    border-radius: 24px;
+  }
+
+  .login-logo-box {
+    width: 94px;
+    height: 94px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+  }
+
+  .login-logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .login-header {
+    margin-bottom: 30px;
+  }
+
+  .login-header h2 {
+    font-size: 32px;
+  }
+
+  .login-header p {
+    font-size: 15px;
+  }
+
+  .form-group label {
+    font-size: 15px;
+  }
+
+  .form-input {
+    height: 54px;
+    font-size: 15px;
+  }
+
+  .btn-submit {
+    height: 56px;
+    font-size: 16px;
+  }
+
+  .login-options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Dark theme overrides when body has .theme-dark */
+.theme-dark .login-admin-page {
+  background: linear-gradient(135deg, #071226 0%, #091426 45%, #06101a 100%);
+}
+
+.theme-dark .login-admin-card {
+  background: #0b1320;
+  border-radius: 30px;
+  padding: 60px 58px 54px;
+  box-shadow: 0 22px 70px rgba(2, 6, 23, 0.7);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.theme-dark .login-logo-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.theme-dark .login-header h2 {
+  color: #e6eef8;
+}
+
+.theme-dark .login-header p {
+  color: #9aa4b2;
+}
+
+.theme-dark .form-group label {
+  color: #9aa4b2;
+}
+
+.theme-dark .form-input {
+  background: #071226;
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.theme-dark .form-input::placeholder {
+  color: #6b7280;
+}
+
+.theme-dark .form-input:focus {
+  background: #06101a;
+  border-color: rgba(99,102,241,0.8);
+  box-shadow: 0 0 0 5px rgba(99,102,241,0.06);
+}
+
+.theme-dark .toggle-password {
+  color: #9aa4b2;
+}
+
+.theme-dark .remember-password,
+.theme-dark .login-header p,
+.theme-dark .login-options {
+  color: #9aa4b2;
+}
+
+.theme-dark .forgot-link {
+  color: #8ab4ff;
+}
+
+.theme-dark .error-box {
+  background: rgba(254, 242, 242, 0.06);
+  color: #fca5a5;
+  border: 1px solid rgba(252, 165, 165, 0.06);
+}
+
+.theme-dark .error {
+  color: #ffb4b4;
+}
+
+/* Dark styles for the change-password modal in Settings */
+.theme-dark .change-password-modal .card {
+  background: #0b1320;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 18px 48px rgba(2,6,23,0.7);
+}
+
+.theme-dark .change-password-modal h5 {
+  color: #e6eef8;
+}
+
+.theme-dark .change-password-modal .form-label {
+  color: #9aa4b2;
+}
+
+.theme-dark .change-password-modal .form-control {
+  background: #071226;
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.theme-dark .change-password-modal .btn-close {
+  filter: invert(1) opacity(0.9);
+}

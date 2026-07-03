@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "../../Compoment/Sidebar/Sidebar";
+import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 import { Search } from "lucide-react";
 
 function FoodManagement() {

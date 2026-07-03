@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "../../Compoment/Sidebar/Sidebar";
+import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 
 const transactions = [
   {
@@ -146,14 +146,15 @@ export default function HistoryPage() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)",
+    background:
+      "linear-gradient(135deg, var(--page-bg-start, #f8fafc) 0%, var(--page-bg-end, #eef2ff) 100%)",
     padding: "32px 16px",
     fontFamily: "Inter, 'Segoe UI', sans-serif",
   },
   container: {
     maxWidth: "1120px",
     margin: "0 auto",
-    background: "#fff",
+    background: "var(--card-bg, #fff)",
     borderRadius: "28px",
     boxShadow: "0 20px 45px rgba(15, 23, 42, 0.12)",
     padding: "32px",
@@ -177,11 +178,11 @@ const styles = {
   title: {
     margin: "8px 0 6px",
     fontSize: "30px",
-    color: "#0f172a",
+    color: "var(--text-color, #0f172a)",
   },
   subtitle: {
     margin: 0,
-    color: "#64748b",
+    color: "var(--subtitle-color, #64748b)",
   },
   summaryCard: {
     background: "linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)",
@@ -207,47 +208,47 @@ const styles = {
     flexWrap: "wrap",
   },
   filterButton: {
-    border: "1px solid #cbd5e1",
-    background: "#fff",
-    color: "#334155",
+    border: "1px solid var(--filter-border, #cbd5e1)",
+    background: "var(--filter-bg, #fff)",
+    color: "var(--filter-text, #334155)",
     padding: "8px 14px",
     borderRadius: "999px",
     cursor: "pointer",
     fontWeight: 600,
   },
   filterButtonActive: {
-    background: "#2563eb",
-    borderColor: "#2563eb",
-    color: "#fff",
+    background: "var(--filter-active-bg, #2563eb)",
+    borderColor: "var(--filter-active-bg, #2563eb)",
+    color: "var(--filter-active-color, #fff)",
   },
   tableWrap: {
     overflowX: "auto",
     borderRadius: "16px",
-    border: "1px solid #e2e8f0",
+    border: "1px solid var(--table-border, #e2e8f0)",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
-    background: "#fff",
+    background: "var(--table-bg, #fff)",
   },
   th: {
     textAlign: "left",
     padding: "12px 14px",
-    background: "#f8fafc",
-    color: "#334155",
+    background: "var(--table-heading-bg, #f8fafc)",
+    color: "var(--table-heading-color, #334155)",
     fontWeight: 700,
-    borderBottom: "1px solid #e2e8f0",
+    borderBottom: "1px solid var(--table-border, #e2e8f0)",
   },
   tr: {
-    borderBottom: "1px solid #f1f5f9",
+    borderBottom: "1px solid var(--tr-border, #f1f5f9)",
   },
   td: {
     padding: "12px 14px",
-    color: "#0f172a",
+    color: "var(--text-color, #0f172a)",
   },
   amountCell: {
     fontWeight: 700,
-    color: "#111827",
+    color: "var(--amount-color, #111827)",
   },
   statusBadge: {
     padding: "8px 12px",
