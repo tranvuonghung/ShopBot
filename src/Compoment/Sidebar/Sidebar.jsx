@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ClipboardList, LayoutDashboard, LogOut, Settings, Utensils } from "lucide-react";
+import { ClipboardList, LayoutDashboard, LogOut, Settings, Utensils, History } from "lucide-react";
+
 import logo from "../../Asset/img/logo.svg";
 
 function Sidebar() {
@@ -11,6 +12,7 @@ function Sidebar() {
     { icon: LayoutDashboard, label: "Tong quan", path: "/dashboard" },
     { icon: Utensils, label: "Menu", path: "/menu" },
     { icon: ClipboardList, label: "Don hang", path: "/orders" },
+    { icon: History, label: "Lich su giao dich  ", path: "/history" },
   ];
 
   return (
