@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "../../Compoment/Sidebar/Sidebar";
+import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 
 function Dashboard() {
 

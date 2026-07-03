@@ -48,7 +48,11 @@ function Sidebar() {
       </ul>
 
       <div className="border-top pt-3 d-flex flex-column gap-2">
-        <button type="button" className="btn btn-light d-flex align-items-center gap-2">
+        <button
+          type="button"
+          onClick={() => navigate("/setting")}
+          className="btn btn-light d-flex align-items-center gap-2"
+        >
           <Settings size={20} />
           <span>Cai dat</span>
         </button>

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from "../../Compoment/Sidebar/Sidebar";
+import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 import { CheckCircle2, Clock, ReceiptText, Search } from "lucide-react";
 
 const orders = [

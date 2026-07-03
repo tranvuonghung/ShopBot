@@ -1,14 +1,21 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Dashboard from "../Page/Dashboard/Dashboard";
-import FoodManagement from "../Page/Menu/Menu";
-import OrdersDashboardPage from "../Page/Order/Order";
+import Dashboard from "../Page/Admin/Dashboard/Dashboard";
+import FoodManagement from "../Page/Admin/Menu/Menu";
+import OrdersDashboardPage from "../Page/Admin/Order/Order";
+import LoginAdmin from "../Page/Admin/Login/LoginAdmin";
+import ForgotPassword from "../Page/Admin/ForgotPassword/ForgotPassword";
+import SettingPage from "../Page/Admin/Setting/setting";
+import HistoryPage from "../Page/Admin/history/history";
+import UserMenu from "../Page/User/Menu/UserMenu";
+import ShoppingCart from "../Page/User/Shopping_Cart/ShoppingCart";
 import PaymentPage from "../client/payment/payment";
-import HistoryPage from "../Page/history/history";
+
 
 export const router = createBrowserRouter([
+  // Admin
   {
     path: "/",
-    element: <Navigate to="/dashboard" replace />,
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/dashboard",
@@ -30,5 +37,27 @@ export const router = createBrowserRouter([
   {
     path: "/history",
     element: <HistoryPage />,
+  },
+  {
+    path: "/setting",
+    element: <SettingPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginAdmin />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+  },
+
+  //User
+  {
+    path: "/user/menu",
+    element: <UserMenu />,
+  },
+  {
+    path: "/user/cart",
+    element: <ShoppingCart />,
   },
 ]);
