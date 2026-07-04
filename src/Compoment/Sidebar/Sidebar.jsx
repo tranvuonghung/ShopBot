@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ClipboardList, LayoutDashboard, LogOut, Settings, Utensils } from "lucide-react";
+import { ClipboardList, LayoutDashboard, LogOut, Settings, Utensils, History } from "lucide-react";
+
 import logo from "../../Asset/img/logo.svg";
 
 function Sidebar() {
@@ -11,6 +12,7 @@ function Sidebar() {
     { icon: LayoutDashboard, label: "Tong quan", path: "/dashboard" },
     { icon: Utensils, label: "Menu", path: "/menu" },
     { icon: ClipboardList, label: "Don hang", path: "/orders" },
+    { icon: History, label: "Lich su giao dich  ", path: "/history" },
   ];
 
   return (
@@ -46,7 +48,11 @@ function Sidebar() {
       </ul>
 
       <div className="border-top pt-3 d-flex flex-column gap-2">
-        <button type="button" className="btn btn-light d-flex align-items-center gap-2">
+        <button
+          type="button"
+          onClick={() => navigate("/setting")}
+          className="btn btn-light d-flex align-items-center gap-2"
+        >
           <Settings size={20} />
           <span>Cai dat</span>
         </button>
