@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const orderItems = [
   {
@@ -38,6 +39,7 @@ const paymentMethods = [
 ];
 
 export default function PaymentPage() {
+  const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState("cod");
 
   const subtotal = useMemo(
@@ -52,7 +54,6 @@ export default function PaymentPage() {
       <div style={styles.container}>
         <div style={styles.headerRow}>
           <div>
-            <p style={styles.eyebrow}>ShopBot • Thanh toán</p>
             <h2 style={styles.title}>Xác nhận đơn hàng</h2>
             <p style={styles.subtitle}>
               Kiểm tra lại chi tiết đơn hàng trước khi hoàn tất giao dịch.
@@ -133,9 +134,12 @@ export default function PaymentPage() {
 
             {selectedMethod === "qr" ? (
               <div style={styles.qrBox}>
-                <div style={styles.qrIcon}>QR</div>
                 <p style={styles.qrText}>Quét mã QR để hoàn tất thanh toán</p>
-                <div style={styles.qrPlaceholder} />
+                <div />
+                <img
+                  src="https://img.vietqr.io/image/MB-0702632725-compact.png"
+                  alt=""
+                />
               </div>
             ) : (
               <div style={styles.noteBox}>
@@ -148,7 +152,13 @@ export default function PaymentPage() {
             )}
 
             <div style={styles.actions}>
-              <button style={styles.secondaryButton}>Quay lại</button>
+              <button
+                type="button"
+                style={styles.secondaryButton}
+                onClick={() => navigate("/user/cart")}
+              >
+                Quay lại
+              </button>
               <button style={styles.primaryButton}>Xác nhận thanh toán</button>
             </div>
           </section>

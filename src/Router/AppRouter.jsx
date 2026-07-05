@@ -1,14 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Dashboard from "../Page/Admin/Dashboard/Dashboard";
-import FoodManagement from "../Page/Admin/Menu/Menu";
-import OrdersDashboardPage from "../Page/Admin/Order/Order";
-import LoginAdmin from "../Page/Admin/Login/LoginAdmin";
-import ForgotPassword from "../Page/Admin/ForgotPassword/ForgotPassword";
-import SettingPage from "../Page/Admin/Setting/setting";
-import HistoryPage from "../Page/Admin/history/history";
-import UserMenu from "../Page/User/Menu/UserMenu";
-import ShoppingCart from "../Page/User/Shopping_Cart/ShoppingCart";
-import PaymentPage from "../client/payment/payment";
+import Dashboard from "../Page/Dashboard/Dashboard";
+import FoodManagement from "../Page/Menu/Menu";
+import OrdersDashboardPage from "../Page/Order/Order";
 
 
 export const router = createBrowserRouter([

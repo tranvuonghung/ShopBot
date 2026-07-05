@@ -142,7 +142,11 @@ export default function ShoppingCart() {
                 <b>{formatPrice(totalPrice)}</b>
               </div>
 
-              <button type="button" className="checkout-btn">
+              <button
+                type="button"
+                className="checkout-btn"
+                onClick={() => navigate("/payment")}
+              >
                 Thanh toán
               </button>
 
