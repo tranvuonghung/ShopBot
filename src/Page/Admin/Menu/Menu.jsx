@@ -4,6 +4,51 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 import { Search } from "lucide-react";
 
+const darkModeStyles = `
+  body.theme-dark .food-page-title,
+  body.theme-dark .food-card-name {
+    color: #f1f5f9;
+  }
+
+  body.theme-dark .food-page-subtitle,
+  body.theme-dark .food-card-desc {
+    color: #94a3b8;
+  }
+
+  body.theme-dark .food-card {
+    background-color: #1e293b;
+    border-color: #334155;
+  }
+
+  body.theme-dark .food-card-price,
+  body.theme-dark .food-card-qty {
+    color: #e2e8f0 !important;
+  }
+
+  body.theme-dark .food-search-group .input-group-text,
+  body.theme-dark .food-search-group .form-control {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+  }
+
+  body.theme-dark .food-search-group .form-control::placeholder {
+    color: #64748b;
+  }
+
+  body.theme-dark .btn-outline-warning-dark {
+    color: #fbbf24;
+    border-color: #fbbf24;
+    background: transparent;
+  }
+
+  body.theme-dark .btn-outline-danger-dark {
+    color: #f87171;
+    border-color: #f87171;
+    background: transparent;
+  }
+`;
+
 function FoodManagement() {
   const [foods, setFoods] = useState([]);
   const [keyword, setKeyword] = useState("");

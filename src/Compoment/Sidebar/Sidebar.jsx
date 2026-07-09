@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ClipboardList, LayoutDashboard, LogOut, Settings, Utensils, History } from "lucide-react";
+import { ClipboardList, LayoutDashboard, LogOut, Settings, Utensils, History, MessageCircle } from "lucide-react";
+import { logout } from "../../utils/auth";
 
 import logo from "../../Asset/img/logo.svg";
 
@@ -8,11 +9,19 @@ function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  function handleLogout() {
+    const confirmed = window.confirm("Bạn có chắc chắn muốn đăng xuất?");
+    if (confirmed) {
+      logout(navigate);
+    }
+  }
+
   const menuItems = [
-    { icon: LayoutDashboard, label: "Tong quan", path: "/dashboard" },
+    { icon: LayoutDashboard, label: "Tổng quan", path: "/dashboard" },
     { icon: Utensils, label: "Menu", path: "/menu" },
-    { icon: ClipboardList, label: "Don hang", path: "/orders" },
-    { icon: History, label: "Lich su giao dich  ", path: "/history" },
+    { icon: ClipboardList, label: "Đơn hàng", path: "/orders" },
+    { icon: MessageCircle, label: "Tin nhắn", path: "/chat" },
+    { icon: History, label: "Lịch sử giao dịch", path: "/history" },
   ];
 
   return (
@@ -35,9 +44,8 @@ function Sidebar() {
               <button
                 type="button"
                 onClick={() => navigate(item.path)}
-                className={`nav-link w-100 d-flex align-items-center gap-2 text-start ${
-                  active ? "active" : "text-secondary"
-                }`}
+                className={`nav-link w-100 d-flex align-items-center gap-2 text-start ${active ? "active" : "text-secondary"
+                  }`}
               >
                 <Icon size={20} />
                 <span className="fw-semibold">{item.label}</span>
@@ -58,7 +66,7 @@ function Sidebar() {
         </button>
         <button
           type="button"
-          onClick={() => navigate("/login")}
+          onClick={handleLogout}
           className="btn btn-outline-danger d-flex align-items-center gap-2"
         >
           <LogOut size={20} />

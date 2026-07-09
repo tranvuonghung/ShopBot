@@ -1,62 +1,112 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../../../Compoment/Sidebar/Sidebar";
 
-const transactions = [
-  {
-    id: "TXN-1001",
-    customer: "Nguyễn Văn A",
-    date: "02/07/2026",
-    amount: 145000,
-    status: "completed",
-    role: "Thanh toán thành công",
-    method: "COD",
-  },
-  {
-    id: "TXN-1002",
-    customer: "Trần Thị B",
-    date: "01/07/2026",
-    amount: 98000,
-    status: "processing",
-    role: "Đang xử lý",
-    method: "QR",
-  },
-  {
-    id: "TXN-1003",
-    customer: "Lê Văn C",
-    date: "30/06/2026",
-    amount: 210000,
-    status: "failed",
-    role: "Thanh toán thất bại",
-    method: "QR",
-  },
-  {
-    id: "TXN-1004",
-    customer: "Phạm Thị D",
-    date: "29/06/2026",
-    amount: 76000,
-    status: "completed",
-    role: "Thanh toán thành công",
-    method: "COD",
-  },
-];
-
 const statusMeta = {
-  completed: { label: "Hoàn thành", color: "#166534", bg: "#dcfce7" },
-  processing: { label: "Đang xử lý", color: "#92400e", bg: "#fef3c7" },
-  failed: { label: "Thất bại", color: "#b91c1c", bg: "#fee2e2" },
+  ["pending".normalize("NFC")]: {
+    label: "Đang xử lý",
+    color: "#92400e",
+    bg: "#fef3c7",
+  },
+  ["success".normalize("NFC")]: {
+    label: "Hoàn thành",
+    color: "#166534",
+    bg: "#dcfce7",
+  },
+  ["failed".normalize("NFC")]: {
+    label: "Thất bại",
+    color: "#b91c1c",
+    bg: "#fee2e2",
+  },
 };
 
+// Biến CSS cho dark mode — chỉ áp dụng khi <body> có class "theme-dark"
+// (class này được set ở trang Cài đặt và giữ nguyên khi chuyển trang trong SPA)
+const darkThemeVars = `
+  body.theme-dark {
+    --page-bg-start: #0f172a;
+    --page-bg-end: #111827;
+    --card-bg: #0f172a;
+    --text-color: #e2e8f0;
+    --subtitle-color: #94a3b8;
+
+    --filter-border: #334155;
+    --filter-bg: #1e293b;
+    --filter-text: #cbd5e1;
+    --filter-active-bg: #3b82f6;
+    --filter-active-color: #ffffff;
+
+    --date-row-bg: #1e293b;
+    --input-bg: #0f172a;
+    --input-border: #334155;
+    --input-text: #e2e8f0;
+
+    --table-border: #334155;
+    --table-bg: #0f172a;
+    --table-heading-bg: #111827;
+    --table-heading-color: #cbd5e1;
+    --tr-border: #1e293b;
+    --amount-color: #f1f5f9;
+  }
+
+  body.theme-dark input[type="date"] {
+    color-scheme: dark;
+  }
+`;
+
 export default function HistoryPage() {
+  const [transactions, setTransactions] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/payments/history")
+      .then((res) => {
+        console.log("API:", res.data.data);
+        setTransactions(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   const filteredTransactions = useMemo(() => {
-    if (activeFilter === "all") return transactions;
-    return transactions.filter((item) => item.status === activeFilter);
-  }, [activeFilter]);
+    let result = transactions;
+
+    if (activeFilter !== "all") {
+      result = result.filter(
+        (item) => item.status?.trim().normalize("NFC") === activeFilter
+      );
+    }
+
+    if (fromDate) {
+      const from = new Date(fromDate);
+      from.setHours(0, 0, 0, 0);
+      result = result.filter((item) => new Date(item.created_at) >= from);
+    }
+
+    if (toDate) {
+      const to = new Date(toDate);
+      to.setHours(23, 59, 59, 999);
+      result = result.filter((item) => new Date(item.created_at) <= to);
+    }
+
+    return result;
+  }, [transactions, activeFilter, fromDate, toDate]);
+
+  const handleResetDate = () => {
+    setFromDate("");
+    setToDate("");
+  };
 
   return (
     <div className="d-flex min-vh-100 bg-light">
+      {/* Inject biến CSS cho dark mode */}
+      <style>{darkThemeVars}</style>
+
       <Sidebar />
 
       <main className="flex-grow-1 p-4">
@@ -64,24 +114,26 @@ export default function HistoryPage() {
           <div style={styles.container}>
             <div style={styles.headerRow}>
               <div>
-             
                 <h2 style={styles.title}>Lịch sử giao dịch</h2>
                 <p style={styles.subtitle}>
-                  Theo dõi các đơn hàng và trạng thái thanh toán của bạn.
+                  Theo dõi các đơn hàng và trạng thái thanh toán.
                 </p>
               </div>
+
               <div style={styles.summaryCard}>
                 <div style={styles.summaryLabel}>Tổng giao dịch</div>
-                <div style={styles.summaryValue}>{transactions.length}</div>
+                <div style={styles.summaryValue}>
+                  {filteredTransactions.length}
+                </div>
               </div>
             </div>
 
             <div style={styles.filterRow}>
               {[
                 { key: "all", label: "Tất cả" },
-                { key: "completed", label: "Hoàn thành" },
-                { key: "processing", label: "Đang xử lý" },
-                { key: "failed", label: "Thất bại" },
+                { key: "success".normalize("NFC"), label: "Hoàn thành" },
+                { key: "pending".normalize("NFC"), label: "Đang xử lý" },
+                { key: "failed".normalize("NFC"), label: "Thất bại" },
               ].map((filter) => (
                 <button
                   key={filter.key}
@@ -98,6 +150,34 @@ export default function HistoryPage() {
               ))}
             </div>
 
+            <div style={styles.dateFilterRow}>
+              <div style={styles.dateField}>
+                <label style={styles.dateLabel}>Từ ngày</label>
+                <input
+                  type="date"
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  style={styles.dateInput}
+                />
+              </div>
+
+              <div style={styles.dateField}>
+                <label style={styles.dateLabel}>Đến ngày</label>
+                <input
+                  type="date"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                  style={styles.dateInput}
+                />
+              </div>
+
+              {(fromDate || toDate) && (
+                <button onClick={handleResetDate} style={styles.resetButton}>
+                  Xóa lọc ngày
+                </button>
+              )}
+            </div>
+
             <div style={styles.tableWrap}>
               <table style={styles.table}>
                 <thead>
@@ -110,29 +190,64 @@ export default function HistoryPage() {
                     <th style={styles.th}>Số tiền</th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  {filteredTransactions.map((item) => (
-                    <tr key={item.id} style={styles.tr}>
-                      <td style={styles.td}>{item.id}</td>
-                      <td style={styles.td}>{item.customer}</td>
-                      <td style={styles.td}>{item.date}</td>
-                      <td style={styles.td}>{item.method}</td>
-                      <td style={styles.td}>
-                        <span
-                          style={{
-                            ...styles.statusBadge,
-                            background: statusMeta[item.status].bg,
-                            color: statusMeta[item.status].color,
-                          }}
-                        >
-                          {statusMeta[item.status].label}
-                        </span>
-                      </td>
-                      <td style={{ ...styles.td, ...styles.amountCell }}>
-                        {item.amount.toLocaleString("vi-VN")}đ
+                  {filteredTransactions.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={styles.emptyState}>
+                        Không có giao dịch nào phù hợp.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    filteredTransactions.map((item) => {
+                      const status = statusMeta[
+                        item.status?.trim().normalize("NFC")
+                      ] || {
+                        label: item.status,
+                        color: "#374151",
+                        bg: "#E5E7EB",
+                      };
+
+                      return (
+                        <tr key={item.id} style={styles.tr}>
+                          <td style={styles.td}>{item.transaction_id}</td>
+
+                          <td style={styles.td}>
+                            {item.customer_name || `KH #${item.customer_id}`}
+                          </td>
+
+                          <td style={styles.td}>
+                            {new Date(item.created_at).toLocaleDateString(
+                              "vi-VN"
+                            )}
+                          </td>
+
+                          <td style={styles.td}>{item.method}</td>
+
+                          <td style={styles.td}>
+                            <span
+                              style={{
+                                ...styles.statusBadge,
+                                background: status.bg,
+                                color: status.color,
+                              }}
+                            >
+                              {status.label}
+                            </span>
+                          </td>
+
+                          <td
+                            style={{
+                              ...styles.td,
+                              ...styles.amountCell,
+                            }}
+                          >
+                            {Number(item.amount).toLocaleString("vi-VN")}đ
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -166,14 +281,6 @@ const styles = {
     gap: "16px",
     marginBottom: "20px",
     flexWrap: "wrap",
-  },
-  eyebrow: {
-    margin: 0,
-    color: "#2563eb",
-    fontWeight: 700,
-    textTransform: "uppercase",
-    letterSpacing: "0.16em",
-    fontSize: "12px",
   },
   title: {
     margin: "8px 0 6px",
@@ -221,6 +328,45 @@ const styles = {
     borderColor: "var(--filter-active-bg, #2563eb)",
     color: "var(--filter-active-color, #fff)",
   },
+  dateFilterRow: {
+    display: "flex",
+    alignItems: "flex-end",
+    gap: "14px",
+    marginBottom: "20px",
+    flexWrap: "wrap",
+    background: "var(--date-row-bg, #f8fafc)",
+    padding: "14px 16px",
+    borderRadius: "14px",
+    border: "1px solid var(--table-border, #e2e8f0)",
+  },
+  dateField: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+  },
+  dateLabel: {
+    fontSize: "12px",
+    fontWeight: 600,
+    color: "var(--subtitle-color, #64748b)",
+  },
+  dateInput: {
+    border: "1px solid var(--input-border, #cbd5e1)",
+    borderRadius: "8px",
+    padding: "8px 10px",
+    fontSize: "14px",
+    color: "var(--input-text, #0f172a)",
+    background: "var(--input-bg, #fff)",
+  },
+  resetButton: {
+    border: "1px solid #ef4444",
+    background: "transparent",
+    color: "#ef4444",
+    padding: "8px 14px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: 600,
+    height: "38px",
+  },
   tableWrap: {
     overflowX: "auto",
     borderRadius: "16px",
@@ -256,5 +402,10 @@ const styles = {
     fontWeight: 700,
     fontSize: "13px",
     display: "inline-block",
+  },
+  emptyState: {
+    textAlign: "center",
+    padding: "24px 14px",
+    color: "var(--subtitle-color, #64748b)",
   },
 };

@@ -1,19 +1,28 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import api from "../../../api/axiosConfig"; // chỉnh lại đường dẫn nếu khác
 import logo from "../../../Asset/img/logo.svg";
 import "../../../Asset/Css/LoginAdmin.css";
 
-// admin@gmail.com
-// 123456
 export default function LoginAdmin() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const notice = location.state?.notice;
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(
+    localStorage.getItem("adminEmail") || ""
+  );
+
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(false);
+
+  const [remember, setRemember] = useState(
+    !!localStorage.getItem("adminEmail")
+  );
+
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   function validate() {
     const e = {};
@@ -33,7 +42,7 @@ export default function LoginAdmin() {
     return e;
   }
 
-  function handleSubmit(ev) {
+  async function handleSubmit(ev) {
     ev.preventDefault();
 
     const e = validate();
@@ -41,14 +50,34 @@ export default function LoginAdmin() {
 
     if (Object.keys(e).length > 0) return;
 
-    // Login demo, không hiển thị sẵn trên giao diện
-    if (email === "admin@gmail.com" && password === "123456") {
-      localStorage.setItem("adminLoggedIn", "true");
-      navigate("/dashboard");
-    } else {
-      setErrors({
-        login: "Email hoặc mật khẩu không đúng.",
+    setLoading(true);
+
+    try {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
       });
+
+      // Lưu token
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("adminLoggedIn", "true");
+
+      // Ghi nhớ email
+      if (remember) {
+        localStorage.setItem("adminEmail", email);
+      } else {
+        localStorage.removeItem("adminEmail");
+      }
+
+      navigate("/dashboard");
+    } catch (err) {
+      setErrors({
+        login:
+          err.response?.data?.detail ||
+          "Đăng nhập thất bại. Vui lòng thử lại.",
+      });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -63,21 +92,30 @@ export default function LoginAdmin() {
           <h2>Sign in</h2>
           <p>Đăng nhập vào trang quản trị</p>
         </div>
+        {notice && (
+          <div className="alert alert-warning" role="alert">
+            {notice}
+          </div>
+        )}
 
         <form className="login-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <label>Email</label>
+
             <input
               className="form-input"
+              type="email"
+              placeholder="Nhập email admin"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
                 setErrors({});
               }}
-              type="email"
-              placeholder="Nhập email admin"
             />
-            {errors.email && <div className="error">{errors.email}</div>}
+
+            {errors.email && (
+              <div className="error">{errors.email}</div>
+            )}
           </div>
 
           <div className="form-group">
@@ -86,25 +124,31 @@ export default function LoginAdmin() {
             <div className="input-row">
               <input
                 className="form-input"
+                type={showPassword ? "text" : "password"}
+                placeholder="Nhập mật khẩu"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setErrors({});
                 }}
-                type={showPassword ? "text" : "password"}
-                placeholder="Nhập mật khẩu"
               />
 
               <button
                 type="button"
                 className="toggle-password"
-                onClick={() => setShowPassword((s) => !s)}
+                onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? (
+                  <EyeOff size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
               </button>
             </div>
 
-            {errors.password && <div className="error">{errors.password}</div>}
+            {errors.password && (
+              <div className="error">{errors.password}</div>
+            )}
           </div>
 
           <div className="login-options">
@@ -122,10 +166,12 @@ export default function LoginAdmin() {
             </Link>
           </div>
 
-          {errors.login && <div className="error-box">{errors.login}</div>}
+          {errors.login && (
+            <div className="error-box">{errors.login}</div>
+          )}
 
-          <button className="btn-submit" type="submit">
-            Đăng nhập
+          <button className="btn-submit" type="submit" disabled={loading}>
+            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>
         </form>
       </div>
