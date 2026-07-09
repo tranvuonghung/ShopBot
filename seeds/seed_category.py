@@ -9,7 +9,9 @@ def seed_category(db):
         Category(name="Gà Rán"),
         Category(name="Burger"),
         Category(name="Nước Uống"),
-        Category(name="Combo")
+        Category(name="Combo"),
+        Category(name="Mì & Cơm"),
+        Category(name="Tráng Miệng"),
     ]
 
     db.add_all(categories)

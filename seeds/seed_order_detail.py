@@ -1,57 +1,42 @@
+import random
+
+from models.order import Order
 from models.order_detail import OrderDetail
+from models.product import Product
+
 
 def seed_order_detail(db):
 
     if db.query(OrderDetail).count() > 0:
         return
 
-    details = [
+    random.seed(43)
 
-        OrderDetail(
-            order_id=1,
-            product_id=1,
-            quantity=2,
-            price=50000
-        ),
+    products = db.query(Product).all()
+    orders = db.query(Order).all()
 
-        OrderDetail(
-            order_id=1,
-            product_id=5,
-            quantity=1,
-            price=15000
-        ),
+    details = []
 
-        OrderDetail(
-            order_id=2,
-            product_id=3,
-            quantity=2,
-            price=55000
-        ),
+    for order in orders:
+        item_count = random.randint(1, 4)
+        chosen_products = random.sample(products, k=min(item_count, len(products)))
 
-        OrderDetail(
-            order_id=3,
-            product_id=7,
-            quantity=1,
-            price=199000
-        ),
+        order_total = 0
+        for product in chosen_products:
+            quantity = random.randint(1, 3)
+            details.append(
+                OrderDetail(
+                    order_id=order.id,
+                    product_id=product.id,
+                    quantity=quantity,
+                    price=product.price
+                )
+            )
+            order_total += quantity * product.price
 
-        OrderDetail(
-            order_id=4,
-            product_id=2,
-            quantity=3,
-            price=65000
-        ),
-
-        OrderDetail(
-            order_id=5,
-            product_id=1,
-            quantity=1,
-            price=50000
-        )
-
-    ]
+        order.total_price = order_total
 
     db.add_all(details)
     db.commit()
 
-    print("Seed OrderDetail thành công")
+    print(f"Seed OrderDetail thành công ({len(details)} dòng chi tiết)")

@@ -32,6 +32,8 @@ class Payment(Base):
 
     amount = Column(Float)
 
+    momo_order_id = Column(String(100), unique=True, index=True)
+
     created_at = Column(
         DateTime,
         default=func.now()

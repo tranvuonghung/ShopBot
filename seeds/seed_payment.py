@@ -1,55 +1,50 @@
+import random
+from datetime import timedelta
+
+from models.order import Order
 from models.payment import Payment
+
+METHODS = ["QR", "momo", "Cash"]
+DONE_STATUSES = {"đã giao", "success"}
+CANCELLED_STATUSES = {"đã huỷ"}
+
 
 def seed_payment(db):
 
     if db.query(Payment).count() > 0:
         return
 
-    payments = [
+    random.seed(44)
 
-        Payment(
-            order_id=1,
-            method="QR",
-            status="chờ xác nhận",
-            amount=115000,
-            transaction_id="TXN001"
-        ),
+    orders = db.query(Order).all()
+    payments = []
 
-        Payment(
-            order_id=2,
-            method="QR",
-            status="xác nhận",
-            amount=135000,
-            transaction_id="TXN002"
-        ),
+    for order in orders:
+        method = random.choice(METHODS)
 
-        Payment(
-            order_id=3,
-            method="QR",
-            status="Thất bại",
-            amount=199000,
-            transaction_id="TXN003"
-        ),
+        if order.status in DONE_STATUSES:
+            status = "success"
+            paid_at = order.created_at + timedelta(minutes=random.randint(5, 60))
+        elif order.status in CANCELLED_STATUSES:
+            status = "failed"
+            paid_at = None
+        else:
+            status = "pending"
+            paid_at = None
 
-        Payment(
-            order_id=4,
-            method="QR",
-            status="xác nhận",
-            amount=215000,
-            transaction_id="TXN004"
-        ),
-
-        Payment(
-            order_id=5,
-            method="Cash",
-            status="xác nhận",
-            amount=99000,
-            transaction_id="TXN005"
+        payments.append(
+            Payment(
+                order_id=order.id,
+                method=method,
+                status=status,
+                amount=order.total_price,
+                paid_at=paid_at,
+                transaction_id=f"TXN{order.id:04d}",
+                momo_order_id=f"{order.id}-{random.randint(1000, 9999):x}" if method == "momo" else None
+            )
         )
-
-    ]
 
     db.add_all(payments)
     db.commit()
 
-    print("Seed Payment thành công")
+    print(f"Seed Payment thành công ({len(payments)} giao dịch)")

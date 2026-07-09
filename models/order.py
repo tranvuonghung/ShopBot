@@ -14,6 +14,13 @@ class Order(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+    order_code = Column(
+        String(20),
+        unique=True,
+        index=True,
+        nullable=True
+    )
+
     guest_id = Column(
         Integer,
         ForeignKey("guest.id")
